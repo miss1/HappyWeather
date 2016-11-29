@@ -31,4 +31,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.yalantis:contextmenu:1.0.7'
 }

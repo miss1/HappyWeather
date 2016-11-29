@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="110dp"
-    android:layout_height="130dp"
-    android:background="#FFFFFF">
+    android:layout_width="80dp"
+    android:layout_height="85dp"
+    android:id="@+id/item_bg">
 
     <ImageView
         android:id="@+id/weather_icon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="10dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_centerHorizontal="true"/>
 
     <TextView
@@ -17,9 +16,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/weather_icon"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
         android:text="some info"
-        android:textSize="12sp"/>
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"/>
 
     <TextView
         android:id="@+id/weather_data"
@@ -27,8 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/weather_tmp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:text="some info"
-        android:textSize="12sp"/>
+        android:textSize="14sp"
+        android:textColor="#FFFFFF"/>
 </RelativeLayout>

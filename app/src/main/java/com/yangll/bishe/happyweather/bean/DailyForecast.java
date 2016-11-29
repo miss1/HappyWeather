@@ -13,6 +13,8 @@ public class DailyForecast {
     private Tmp tmp;                //温度
     private Wind wind;              //风力风向
 
+    private boolean isSeclect;      //是否选中
+
     public Cond getCond() {
         return cond;
     }
@@ -51,5 +53,13 @@ public class DailyForecast {
 
     public void setWind(Wind wind) {
         this.wind = wind;
+    }
+
+    public boolean isSeclect() {
+        return isSeclect;
+    }
+
+    public void setSeclect(boolean seclect) {
+        isSeclect = seclect;
     }
 }
