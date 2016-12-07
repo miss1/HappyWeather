@@ -32,4 +32,5 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.yalantis:contextmenu:1.0.7'
+    compile files('libs/AMap_Location_V3.1.0_20161027.jar')
 }

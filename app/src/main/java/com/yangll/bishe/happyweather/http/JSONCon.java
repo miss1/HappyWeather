@@ -7,6 +7,7 @@ package com.yangll.bishe.happyweather.http;
 public class JSONCon {
 
     public static final String SERVER_URL = "https://free-api.heweather.com/v5";
+    public static final String CITY_URL = "http://files.heweather.com/china-city-list.json";
 
     public static final String PATH_FORECAST = "/forecast";
     public static final String PATH_NOW = "/now";

@@ -17,6 +17,37 @@ public class WeatherUtil {
         return data;
     }
 
+    /*
+    * 天气背景
+    */
+    public static int getWeatherBg(String code){
+        int icon;
+        switch (code.charAt(0)){
+            case '1':
+                icon = R.drawable.bg_sunny;
+                break;
+            case '2':
+                icon = R.drawable.bg_thunder;
+                break;
+            case '3':
+                icon = R.drawable.bg_rain;
+                break;
+            case '4':
+                icon = R.drawable.bg_snow;
+                break;
+            case '5':
+                icon = R.drawable.bg_cloudynight;
+                break;
+            default:
+                icon = R.drawable.bg_cloudynight;
+                break;
+        }
+        return icon;
+    }
+
+    /*
+    * 天气图标
+    */
     public static int getWeatherIcon(String code){
         int icon;
         switch (code){
