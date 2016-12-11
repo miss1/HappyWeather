@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,11 +26,13 @@ public class AlertDialog {
 	private Button btn_neg;
 	private Button btn_pos;
 	private ImageView img_line;
+	private EditText txt_input;
 	private Display display;
 	private boolean showTitle = false;
 	private boolean showMsg = false;
 	private boolean showPosBtn = false;
 	private boolean showNegBtn = false;
+	private boolean showInput = false;
 
 	public AlertDialog(Context context) {
 		this.context = context;
@@ -55,6 +58,8 @@ public class AlertDialog {
 		btn_pos.setVisibility(View.GONE);
 		img_line = (ImageView) view.findViewById(R.id.img_line);
 		img_line.setVisibility(View.GONE);
+		txt_input = (EditText) view.findViewById(R.id.txt_input);
+		txt_input.setVisibility(View.GONE);
 
 		// 定义Dialog布局和参数
 		dialog = new Dialog(context, R.style.AlertDialogStyle);
@@ -84,6 +89,11 @@ public class AlertDialog {
 		} else {
 			txt_msg.setText(msg);
 		}
+		return this;
+	}
+
+	public AlertDialog setInput(){
+		showInput = true;
 		return this;
 	}
 
@@ -142,6 +152,10 @@ public class AlertDialog {
 			txt_msg.setVisibility(View.VISIBLE);
 		}
 
+		if (showInput) {
+			txt_input.setVisibility(View.VISIBLE);
+		}
+
 		if (!showPosBtn && !showNegBtn) {
 			btn_pos.setText("确定");
 			btn_pos.setVisibility(View.VISIBLE);
@@ -176,5 +190,9 @@ public class AlertDialog {
 	public void show() {
 		setLayout();
 		dialog.show();
+	}
+
+	public String getDeleteCity(){
+		return txt_input.getText().toString();
 	}
 }

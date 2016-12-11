@@ -4,7 +4,6 @@
     android:id="@+id/activity_add_city"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_addcity"
     tools:context="com.yangll.bishe.happyweather.activity.AddCityActivity">
 
     <android.support.v7.widget.RecyclerView

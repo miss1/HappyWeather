@@ -8,6 +8,8 @@ import com.yangll.bishe.happyweather.R;
 
 public class WeatherUtil {
 
+    public static String bg = "";
+
     /*
     * 将时间去掉年份显示出来
     */

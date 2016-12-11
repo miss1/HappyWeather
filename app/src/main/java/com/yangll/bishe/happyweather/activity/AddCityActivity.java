@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.yangll.bishe.happyweather.R;
@@ -27,6 +28,7 @@ import com.yangll.bishe.happyweather.http.AlertDialog;
 import com.yangll.bishe.happyweather.http.HttpPost;
 import com.yangll.bishe.happyweather.http.JSONCon;
 import com.yangll.bishe.happyweather.http.MyProgressBar;
+import com.yangll.bishe.happyweather.http.WeatherUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,9 @@ public class AddCityActivity extends AppCompatActivity {
 
     private String city;
 
+    @BindView(R.id.activity_add_city)
+    RelativeLayout bg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +67,9 @@ public class AddCityActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_add_city);
         ButterKnife.bind(this);
+        if (!WeatherUtil.bg.equals("")){
+            bg.setBackgroundResource(WeatherUtil.getWeatherBg(WeatherUtil.bg));
+        }
 
         MyProgressBar myProgressBar = new MyProgressBar();
         progressBar = myProgressBar.createMyProgressBar(this,null);

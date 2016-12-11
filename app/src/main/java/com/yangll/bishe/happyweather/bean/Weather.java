@@ -11,6 +11,7 @@ public class Weather {
     private Basic basic;
     private String status;
     private List<DailyForecast> daily_forecast;
+    private Now now;
 
     public Basic getBasic() {
         return basic;
@@ -34,5 +35,13 @@ public class Weather {
 
     public void setDaily_forecast(List<DailyForecast> daily_forecast) {
         this.daily_forecast = daily_forecast;
+    }
+
+    public Now getNow() {
+        return now;
+    }
+
+    public void setNow(Now now) {
+        this.now = now;
     }
 }

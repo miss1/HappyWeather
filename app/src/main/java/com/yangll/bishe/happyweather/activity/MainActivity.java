@@ -201,7 +201,24 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
     private void initData() {
         //progressBar.setVisibility(View.VISIBLE);
         new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_FORECAST+"?city="+city+"&key="+JSONCon.KEY, forecsatHandler).exe(2);
+        if (weatherDB.getCityResponse(city).get(0).getNow() == null){
+            new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_NOW+"?city="+city+"&key="+JSONCon.KEY, nowHandler).exe(2);
+        }
     }
+
+    private Handler nowHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case HttpPost.POST_SUCCES:
+                    weatherDB.updateNowResponse(city, (String) msg.obj);
+                    break;
+                case HttpPost.POST_LOGIC_ERROR:
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     private Handler forecsatHandler = new Handler(){
         @Override
@@ -229,6 +246,7 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
         WeatherJson weatherJson = gson.fromJson(response, WeatherJson.class);
         weathers = weatherJson.getHeWeather5();
         dailyForecasts = weathers.get(0).getDaily_forecast();
+        WeatherUtil.bg = dailyForecasts.get(0).getCond().getCode_d();  //将背景码存起来
         //讲解析后的数据显示到界面
         initSeclect(0);
         adapter.bindDatas(dailyForecasts);

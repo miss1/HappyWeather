@@ -11,6 +11,8 @@ public class Cond {
     private String code_n;     //夜间天气状况代码
     private String txt_d;      //白天天气状况描述
     private String txt_n;      //夜间天气状况描述
+    private String code;       //实时天气代码
+    private String txt;        //实时天气描述
 
     public String getCode_d() {
         return code_d;
@@ -42,5 +44,21 @@ public class Cond {
 
     public void setTxt_n(String txt_n) {
         this.txt_n = txt_n;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getTxt() {
+        return txt;
+    }
+
+    public void setTxt(String txt) {
+        this.txt = txt;
     }
 }

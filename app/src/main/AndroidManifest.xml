@@ -43,10 +43,11 @@
 
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.AddCityActivity"
-            android:theme="@style/Theme.AppCompat.Light"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity android:name=".activity.WeatherDetailActivity" />
-        <activity android:name=".activity.ManagerCityActivity"></activity>
+        <activity android:name=".activity.ManagerCityActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
     </application>
 
 </manifest>
