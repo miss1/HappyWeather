@@ -38,7 +38,7 @@ public class Spalsh extends AppCompatActivity {
                 }
             }, 2000);
         }else {
-            new HttpPost(JSONCon.CITY_URL, cityListHandler).exe(1);
+            new HttpPost(JSONCon.CITY_URL, cityListHandler).exe();
         }
     }
 

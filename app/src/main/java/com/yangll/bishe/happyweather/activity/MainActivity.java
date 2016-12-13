@@ -32,20 +32,24 @@ import com.yalantis.contextmenu.lib.interfaces.OnMenuItemClickListener;
 import com.yangll.bishe.happyweather.R;
 import com.yangll.bishe.happyweather.adapter.MainGalleryAdapter;
 import com.yangll.bishe.happyweather.adapter.OnRecyclerViewListener;
+import com.yangll.bishe.happyweather.adapter.SpinerListAdapter;
+import com.yangll.bishe.happyweather.bean.AllResponse;
 import com.yangll.bishe.happyweather.bean.DailyForecast;
 import com.yangll.bishe.happyweather.bean.Weather;
 import com.yangll.bishe.happyweather.bean.WeatherJson;
 import com.yangll.bishe.happyweather.db.WeatherDB;
 import com.yangll.bishe.happyweather.http.HttpPost;
 import com.yangll.bishe.happyweather.http.JSONCon;
-import com.yangll.bishe.happyweather.http.MyProgressBar;
+import com.yangll.bishe.happyweather.view.MyProgressBar;
 import com.yangll.bishe.happyweather.http.WeatherUtil;
+import com.yangll.bishe.happyweather.view.SpinerPopWindow;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements OnMenuItemClickListener,AMapLocationListener{
 
@@ -69,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
     @BindView(R.id.update_time)
     TextView updateTime;
 
+    @BindView(R.id.location)
+    ImageView img_location;
+
     private MainGalleryAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
 
@@ -80,13 +87,16 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
     private AMapLocationClient mapLocationClient;
     private AMapLocationClientOption mapLocationClientOption;
 
-    private String city;
-
     private WeatherDB weatherDB;
 
     private ProgressBar progressBar;
 
     private TextView mToolBarTextView;
+
+    private SpinerPopWindow spinerPopWindow;
+    private SpinerListAdapter spinerAdapter;
+    private List<AllResponse> spinerlist = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
         if(weatherDB.getLocationCityResponse(1).size() > 0){
             initToolbar(weatherDB.getLocationCityResponse(1).get(0).getCity());
             if (weatherDB.getLocationCityResponse(1).get(0).getForecast().length() > 0){
-                showWeather(weatherDB.getLocationCityResponse(1).get(0).getForecast(),weatherDB.getLocationCityResponse(1).get(0).getCity());
+                showWeather(weatherDB.getLocationCityResponse(1).get(0).getForecast(),weatherDB.getLocationCityResponse(1).get(0).getCity(),1);
             }
         }else {
             initToolbar("定位中...");
@@ -134,6 +144,42 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
 
         initMenuFragment();
         initLocation();
+
+        initSpinerView();
+    }
+
+    //城市下拉框，切换城市，查看其他城市的七天预报
+    private void initSpinerView() {
+        if (weatherDB.getAllResponses().size() > 0){
+            spinerAdapter = new SpinerListAdapter();
+            spinerlist.addAll(weatherDB.getAllResponses());
+            spinerAdapter.bindDatas(spinerlist);
+
+            spinerPopWindow = new SpinerPopWindow(MainActivity.this);
+            spinerPopWindow.setAdapter(spinerAdapter);
+
+            spinerAdapter.setOnRecyclerViewListener(new OnRecyclerViewListener() {
+                @Override
+                public void onItemClick(int position) {
+                    String selectcity = spinerlist.get(position).getCity();
+                    String forcastResponse = spinerlist.get(position).getForecast();
+                    int location = spinerlist.get(position).getIsLocation();
+
+                    if (forcastResponse == null || "".equals(forcastResponse)){
+                        progressBar.setVisibility(View.VISIBLE);
+                        initData(selectcity, location);
+                    }else {
+                        showWeather(forcastResponse, selectcity, location);
+                    }
+                    spinerPopWindow.dismiss();
+                }
+
+                @Override
+                public boolean onItemLongClick(int position) {
+                    return false;
+                }
+            });
+        }
     }
 
     //顶部一栏
@@ -151,10 +197,18 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                initData();
+                refreshAllForecast();
             }
         });
         mToolBarTextView.setText(cityname);
+    }
+
+    //点击顶部城市名称弹出下拉框切换城市
+    @OnClick(R.id.text_view_toolbar_title)
+    public void changeCity(View view){
+        spinerPopWindow.setWidth(mToolBarTextView.getWidth());
+        spinerPopWindow.setHeight(300);
+        spinerPopWindow.showAsDropDown(mToolBarTextView);
     }
 
     //定位相关设置
@@ -174,35 +228,45 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
     public void onLocationChanged(AMapLocation aMapLocation) {
         if (aMapLocation != null){
             if (aMapLocation.getErrorCode() == 0){
+                String locationcity;
                 if(aMapLocation.getCity().length() > 2){
-                    city = aMapLocation.getCity().substring(0, aMapLocation.getCity().length() - 1);
+                    locationcity = aMapLocation.getCity().substring(0, aMapLocation.getCity().length() - 1);
                 }else {
-                    city = aMapLocation.getCity();
+                    locationcity = aMapLocation.getCity();
                 }
                 //当前定位城市已经存在在已添加城市中
-                if(weatherDB.getCityResponse(city).size() > 0){
+                if(weatherDB.getCityResponse(locationcity).size() > 0){
                     //上次定位城市与当前定位城市不同，修改定位标记
-                    if (weatherDB.getCityResponse(city).get(0).getIsLocation() == 0){
-                        weatherDB.updateLocation(city);
+                    if (weatherDB.getCityResponse(locationcity).get(0).getIsLocation() == 0){
+                        weatherDB.updateLocation(locationcity);
                     }
-                    initData();
+                    mToolBarTextView.setText(locationcity);
+                    //initData(locationcity, 1);
                 }else {
                     //当前定位城市不存在在已添加城市中
                     weatherDB.clearLocation();
-                    weatherDB.addCity(city, null, null, null, 1);
-                    initData();
+                    weatherDB.addCity(locationcity, null, null, null, 1);
+                    mToolBarTextView.setText(locationcity);
+                    //initData(locationcity, 1);
                 }
-                //initToolbar(city);
+                refreshAllForecast();
             }
         }
     }
 
+    //更新所有添加城市的七天预报
+    private void refreshAllForecast(){
+        for(AllResponse resp : weatherDB.getAllResponses()){
+            new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_FORECAST+"?city="+resp.getCity()+"&key="+JSONCon.KEY, resp.getIsLocation(), resp.getCity(), refreshHandler).exe();
+        }
+    }
+
     //从服务器查询连续七天的天气信息
-    private void initData() {
+    private void initData(String cityname, int islocation) {
         //progressBar.setVisibility(View.VISIBLE);
-        new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_FORECAST+"?city="+city+"&key="+JSONCon.KEY, forecsatHandler).exe(2);
-        if (weatherDB.getCityResponse(city).get(0).getNow() == null){
-            new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_NOW+"?city="+city+"&key="+JSONCon.KEY, nowHandler).exe(2);
+        new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_FORECAST+"?city="+cityname+"&key="+JSONCon.KEY, islocation, cityname, forecsatHandler).exe();
+        if (weatherDB.getCityResponse(cityname).get(0).getNow() == null){
+            new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_NOW+"?city="+cityname+"&key="+JSONCon.KEY, cityname, nowHandler).exe();
         }
     }
 
@@ -211,12 +275,13 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case HttpPost.POST_SUCCES:
-                    weatherDB.updateNowResponse(city, (String) msg.obj);
+                    weatherDB.updateNowResponse(msg.getData().getString("cityname"), msg.getData().getString("response"));
                     break;
                 case HttpPost.POST_LOGIC_ERROR:
                     break;
             }
             super.handleMessage(msg);
+            progressBar.setVisibility(View.GONE);
         }
     };
 
@@ -226,8 +291,10 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
             switch (msg.what){
                 case HttpPost.POST_SUCCES:
                     //将预报信息缓存更新到数据库
-                    weatherDB.updateForecastResponse(city, (String) msg.obj);
-                    showWeather((String) msg.obj, city);
+                    String city = msg.getData().getString("cityname");
+                    String response = msg.getData().getString("response");
+                    weatherDB.updateForecastResponse(city, response);
+                    showWeather(response, city, msg.arg1);
                     break;
                 case HttpPost.POST_LOGIC_ERROR:
                     Toast.makeText(MainActivity.this, (String) msg.obj,Toast.LENGTH_SHORT).show();
@@ -238,9 +305,40 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
         }
     };
 
-    //解析返回的数据并显示到界面
-    private void showWeather(String response, String cityy){
+    private Handler refreshHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case HttpPost.POST_SUCCES:
+                    //将预报信息缓存更新到数据库
+                    String city = msg.getData().getString("cityname");
+                    String response = msg.getData().getString("response");
+                    weatherDB.updateForecastResponse(city, response);
+                    if(mToolBarTextView.getText().toString().equals(city)){
+                        showWeather(response, city, msg.arg1);
+                    }
+                    spinerlist.clear();
+                    spinerlist.addAll(weatherDB.getAllResponses());
+                    spinerAdapter.bindDatas(spinerlist);
+                    spinerAdapter.notifyDataSetChanged();
+                    break;
+                case HttpPost.POST_LOGIC_ERROR:
+                    Toast.makeText(MainActivity.this, (String) msg.obj,Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            super.handleMessage(msg);
+            progressBar.setVisibility(View.GONE);
+        }
+    };
+
+    //解析返回的数据并显示到界面(七天天气)
+    private void showWeather(String response, String cityy, int islocation){
         mToolBarTextView.setText(cityy);
+        if (islocation == 1){
+            img_location.setVisibility(View.VISIBLE);
+        }else {
+            img_location.setVisibility(View.GONE);
+        }
         //解析返回的json数据
         Gson gson = new Gson();
         WeatherJson weatherJson = gson.fromJson(response, WeatherJson.class);
@@ -346,6 +444,15 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        spinerlist.clear();
+        spinerlist.addAll(weatherDB.getAllResponses());
+        spinerAdapter.bindDatas(spinerlist);
+        spinerAdapter.notifyDataSetChanged();
+        super.onResume();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.yangll.bishe.happyweather.http;
+package com.yangll.bishe.happyweather.view;
 
 import android.app.Dialog;
 import android.content.Context;

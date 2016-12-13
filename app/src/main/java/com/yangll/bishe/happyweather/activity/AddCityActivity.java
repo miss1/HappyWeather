@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,10 +23,10 @@ import com.yangll.bishe.happyweather.adapter.OnRecyclerViewListener;
 import com.yangll.bishe.happyweather.adapter.SearchCityAdapter;
 import com.yangll.bishe.happyweather.bean.City;
 import com.yangll.bishe.happyweather.db.WeatherDB;
-import com.yangll.bishe.happyweather.http.AlertDialog;
+import com.yangll.bishe.happyweather.view.AlertDialog;
 import com.yangll.bishe.happyweather.http.HttpPost;
 import com.yangll.bishe.happyweather.http.JSONCon;
-import com.yangll.bishe.happyweather.http.MyProgressBar;
+import com.yangll.bishe.happyweather.view.MyProgressBar;
 import com.yangll.bishe.happyweather.http.WeatherUtil;
 
 import java.util.ArrayList;
@@ -116,7 +115,7 @@ public class AddCityActivity extends AppCompatActivity {
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
-        new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_NOW+"?city="+city+"&key="+JSONCon.KEY, nowHandler).exe(2);
+        new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_NOW+"?city="+city+"&key="+JSONCon.KEY, city, nowHandler).exe();
     }
 
     private Handler nowHandler = new Handler(){
@@ -124,7 +123,7 @@ public class AddCityActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case HttpPost.POST_SUCCES:
-                    weatherDB.addCity(city, null, (String)msg.obj, null, 0);
+                    weatherDB.addCity(city, null, msg.getData().getString("response"), null, 0);
                     Toast.makeText(AddCityActivity.this, "添加成功",Toast.LENGTH_SHORT).show();
                     jumpToManager();
                     break;

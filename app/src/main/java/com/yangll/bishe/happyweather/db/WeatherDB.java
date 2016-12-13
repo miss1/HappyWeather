@@ -176,7 +176,7 @@ public class WeatherDB {
     }
 
     //更新城市的七天预报天气信息
-    public void updateForecastResponse(String city, String forecast){
+    public void  updateForecastResponse(String city, String forecast){
         ContentValues contentValues = new ContentValues();
         contentValues.put("forecast", forecast);
         db.update("Weather", contentValues, "city = ?", new String[]{city});

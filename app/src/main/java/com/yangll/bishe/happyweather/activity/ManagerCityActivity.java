@@ -1,21 +1,17 @@
 package com.yangll.bishe.happyweather.activity;
 
 import android.content.Intent;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,7 +22,7 @@ import com.yangll.bishe.happyweather.bean.AllResponse;
 import com.yangll.bishe.happyweather.bean.Weather;
 import com.yangll.bishe.happyweather.bean.WeatherJson;
 import com.yangll.bishe.happyweather.db.WeatherDB;
-import com.yangll.bishe.happyweather.http.AlertDialog;
+import com.yangll.bishe.happyweather.view.AlertDialog;
 import com.yangll.bishe.happyweather.http.WeatherUtil;
 
 import java.util.ArrayList;
