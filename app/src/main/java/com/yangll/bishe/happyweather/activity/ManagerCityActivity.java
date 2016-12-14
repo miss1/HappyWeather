@@ -1,6 +1,8 @@
 package com.yangll.bishe.happyweather.activity;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -22,8 +25,11 @@ import com.yangll.bishe.happyweather.bean.AllResponse;
 import com.yangll.bishe.happyweather.bean.Weather;
 import com.yangll.bishe.happyweather.bean.WeatherJson;
 import com.yangll.bishe.happyweather.db.WeatherDB;
+import com.yangll.bishe.happyweather.http.HttpPost;
+import com.yangll.bishe.happyweather.http.JSONCon;
 import com.yangll.bishe.happyweather.view.AlertDialog;
 import com.yangll.bishe.happyweather.http.WeatherUtil;
+import com.yangll.bishe.happyweather.view.MyProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +53,10 @@ public class ManagerCityActivity extends AppCompatActivity {
 
     private List<AllResponse> allResponses = new ArrayList<>();
 
+    private ActionBar ab;
+
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +64,16 @@ public class ManagerCityActivity extends AppCompatActivity {
         //设置成为覆盖模式后，actionBar相当于漂浮在activity之上，不干预activity的布局
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 
-        ActionBar ab = this.getSupportActionBar();
+        ab = this.getSupportActionBar();
         ab.setTitle("MangerCity");
         ab.setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.activity_manager_city);
         ButterKnife.bind(this);
+
+        MyProgressBar myProgressBar = new MyProgressBar();
+        progressBar = myProgressBar.createMyProgressBar(this,null);
+
         if (!WeatherUtil.bg.equals("")){
             bg.setBackgroundResource(WeatherUtil.getWeatherBg(WeatherUtil.bg));
         }
@@ -91,6 +105,7 @@ public class ManagerCityActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        weathers.clear();
         for (AllResponse all:allResponses){
             if (all.getNow() != null){
                 Gson gson = new Gson();
@@ -98,9 +113,34 @@ public class ManagerCityActivity extends AppCompatActivity {
                 weathers.add(weatherJson.getHeWeather5().get(0));
             }
         }
+        ab.setSubtitle("update:"+WeatherUtil.month_day(weathers.get(weathers.size()-1).getBasic().getUpdate().getLoc()));
         adapter.bindDatas(weathers);
         adapter.notifyDataSetChanged();
     }
+
+    //更新所有添加城市的当前预报
+    private void refreshAllNow(){
+        progressBar.setVisibility(View.VISIBLE);
+        for(AllResponse resp : weatherDB.getAllResponses()){
+            new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_NOW+"?city="+resp.getCity()+"&key="+JSONCon.KEY, resp.getCity(), nowHandler).exe();
+        }
+    }
+
+    private Handler nowHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case HttpPost.POST_SUCCES:
+                    weatherDB.updateNowResponse(msg.getData().getString("cityname"), msg.getData().getString("response"));
+                    break;
+                case HttpPost.POST_LOGIC_ERROR:
+                    break;
+            }
+            super.handleMessage(msg);
+            progressBar.setVisibility(View.GONE);
+            initData();
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -118,6 +158,9 @@ public class ManagerCityActivity extends AppCompatActivity {
                 Intent intent = new Intent(ManagerCityActivity.this, AddCityActivity.class);
                 startActivity(intent);
                 finish();
+                break;
+            case R.id.id_action_refresh:
+                refreshAllNow();
                 break;
             case R.id.id_action_delete:
                 final AlertDialog builder = new AlertDialog(ManagerCityActivity.this).builder();

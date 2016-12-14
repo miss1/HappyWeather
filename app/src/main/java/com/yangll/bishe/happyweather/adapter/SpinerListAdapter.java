@@ -23,8 +23,8 @@ public class SpinerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void bindDatas(List<AllResponse> list){
-        allResponses.clear();
         if (null != list){
+            allResponses.clear();
             allResponses.addAll(list);
         }
     }

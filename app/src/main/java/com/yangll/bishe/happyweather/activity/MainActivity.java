@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                     weatherDB.clearLocation();
                     weatherDB.addCity(locationcity, null, null, null, 1);
                     mToolBarTextView.setText(locationcity);
-                    //initData(locationcity, 1);
+                    initData(locationcity, 1);
                 }
                 refreshAllForecast();
             }
@@ -317,10 +317,6 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                     if(mToolBarTextView.getText().toString().equals(city)){
                         showWeather(response, city, msg.arg1);
                     }
-                    spinerlist.clear();
-                    spinerlist.addAll(weatherDB.getAllResponses());
-                    spinerAdapter.bindDatas(spinerlist);
-                    spinerAdapter.notifyDataSetChanged();
                     break;
                 case HttpPost.POST_LOGIC_ERROR:
                     Toast.makeText(MainActivity.this, (String) msg.obj,Toast.LENGTH_SHORT).show();
@@ -448,10 +444,12 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
 
     @Override
     protected void onResume() {
-        spinerlist.clear();
-        spinerlist.addAll(weatherDB.getAllResponses());
-        spinerAdapter.bindDatas(spinerlist);
-        spinerAdapter.notifyDataSetChanged();
+        if(weatherDB.getAllResponses().size() > 0){
+            spinerlist.clear();
+            spinerlist.addAll(weatherDB.getAllResponses());
+            spinerAdapter.bindDatas(spinerlist);
+            spinerAdapter.notifyDataSetChanged();
+        }
         super.onResume();
     }
 

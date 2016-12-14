@@ -4,17 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/id_action_add"
-        android:icon="@mipmap/actionbar_add_icon"
-        android:orderInCategory="100"
-        android:title="add"
-        app:showAsAction="ifRoom"/>
-
-    <item
         android:id="@+id/id_action_delete"
         android:icon="@mipmap/ic_menu_delete"
         android:orderInCategory="100"
         android:title="delete"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/id_action_close"
+        android:orderInCategory="100"
+        android:title="取消"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/id_action_add"
+        android:orderInCategory="100"
+        android:title="添加"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/id_action_refresh"
+        android:orderInCategory="100"
+        android:title="刷新"
+        app:showAsAction="never"/>
 
 </menu>
