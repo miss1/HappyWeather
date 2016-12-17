@@ -135,9 +135,7 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
         //先展示上次定位城市的天气信息，稍后更新定位天气之后在更新界面
         if(weatherDB.getLocationCityResponse(1).size() > 0){
             initToolbar(weatherDB.getLocationCityResponse(1).get(0).getCity());
-            if (weatherDB.getLocationCityResponse(1).get(0).getForecast().length() > 0){
-                showWeather(weatherDB.getLocationCityResponse(1).get(0).getForecast(),weatherDB.getLocationCityResponse(1).get(0).getCity(),1);
-            }
+            showWeather(weatherDB.getLocationCityResponse(1).get(0).getReponse(),weatherDB.getLocationCityResponse(1).get(0).getCity(),1);
         }else {
             initToolbar("定位中...");
         }
@@ -162,14 +160,14 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                 @Override
                 public void onItemClick(int position) {
                     String selectcity = spinerlist.get(position).getCity();
-                    String forcastResponse = spinerlist.get(position).getForecast();
+                    String response = spinerlist.get(position).getReponse();
                     int location = spinerlist.get(position).getIsLocation();
 
-                    if (forcastResponse == null || "".equals(forcastResponse)){
+                    if (response == null || "".equals(response)){
                         progressBar.setVisibility(View.VISIBLE);
                         initData(selectcity, location);
                     }else {
-                        showWeather(forcastResponse, selectcity, location);
+                        showWeather(response, selectcity, location);
                     }
                     spinerPopWindow.dismiss();
                 }
@@ -197,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                refreshAllForecast();
+                refreshAllWeather();
             }
         });
         mToolBarTextView.setText(cityname);
@@ -241,49 +239,30 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                         weatherDB.updateLocation(locationcity);
                     }
                     mToolBarTextView.setText(locationcity);
+                    refreshAllWeather();
                     //initData(locationcity, 1);
                 }else {
                     //当前定位城市不存在在已添加城市中
                     weatherDB.clearLocation();
-                    weatherDB.addCity(locationcity, null, null, null, 1);
-                    mToolBarTextView.setText(locationcity);
                     initData(locationcity, 1);
                 }
-                refreshAllForecast();
+
             }
         }
     }
 
     //更新所有添加城市的七天预报
-    private void refreshAllForecast(){
+    private void refreshAllWeather(){
         for(AllResponse resp : weatherDB.getAllResponses()){
-            new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_FORECAST+"?city="+resp.getCity()+"&key="+JSONCon.KEY, resp.getIsLocation(), resp.getCity(), refreshHandler).exe();
+            new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_WEATHER+"?city="+resp.getCity()+"&key="+JSONCon.KEY, resp.getIsLocation(), resp.getCity(), refreshHandler).exe();
         }
     }
 
     //从服务器查询连续七天的天气信息
     private void initData(String cityname, int islocation) {
         //progressBar.setVisibility(View.VISIBLE);
-        new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_FORECAST+"?city="+cityname+"&key="+JSONCon.KEY, islocation, cityname, forecsatHandler).exe();
-        if (weatherDB.getCityResponse(cityname).get(0).getNow() == null){
-            new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_NOW+"?city="+cityname+"&key="+JSONCon.KEY, cityname, nowHandler).exe();
-        }
+        new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_WEATHER+"?city="+cityname+"&key="+JSONCon.KEY, islocation, cityname, forecsatHandler).exe();
     }
-
-    private Handler nowHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case HttpPost.POST_SUCCES:
-                    weatherDB.updateNowResponse(msg.getData().getString("cityname"), msg.getData().getString("response"));
-                    break;
-                case HttpPost.POST_LOGIC_ERROR:
-                    break;
-            }
-            super.handleMessage(msg);
-            progressBar.setVisibility(View.GONE);
-        }
-    };
 
     private Handler forecsatHandler = new Handler(){
         @Override
@@ -293,8 +272,15 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                     //将预报信息缓存更新到数据库
                     String city = msg.getData().getString("cityname");
                     String response = msg.getData().getString("response");
-                    weatherDB.updateForecastResponse(city, response);
+
+                    AllResponse allResponse = new AllResponse();
+                    allResponse.setCity(city);
+                    allResponse.setReponse(response);
+                    allResponse.setIsLocation(msg.arg1);
+                    weatherDB.addCity(allResponse);
+
                     showWeather(response, city, msg.arg1);
+                    refreshAllWeather();
                     break;
                 case HttpPost.POST_LOGIC_ERROR:
                     Toast.makeText(MainActivity.this, (String) msg.obj,Toast.LENGTH_SHORT).show();
@@ -313,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                     //将预报信息缓存更新到数据库
                     String city = msg.getData().getString("cityname");
                     String response = msg.getData().getString("response");
-                    weatherDB.updateForecastResponse(city, response);
+                    weatherDB.updateWeatherResponse(city, response);
                     if(mToolBarTextView.getText().toString().equals(city)){
                         showWeather(response, city, msg.arg1);
                     }
@@ -432,8 +418,7 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                 startActivity(intent);
                 break;
             case 2:
-                intent.setClass(MainActivity.this, WeatherDetailActivity.class);
-                startActivity(intent);
+                WeatherDetailActivity.actionStart(MainActivity.this, mToolBarTextView.getText().toString());
                 break;
             case 3:
                 intent.setClass(MainActivity.this, ManagerCityActivity.class);

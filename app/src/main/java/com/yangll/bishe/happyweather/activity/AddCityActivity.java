@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.yangll.bishe.happyweather.R;
 import com.yangll.bishe.happyweather.adapter.OnRecyclerViewListener;
 import com.yangll.bishe.happyweather.adapter.SearchCityAdapter;
+import com.yangll.bishe.happyweather.bean.AllResponse;
 import com.yangll.bishe.happyweather.bean.City;
 import com.yangll.bishe.happyweather.db.WeatherDB;
 import com.yangll.bishe.happyweather.view.AlertDialog;
@@ -115,7 +116,7 @@ public class AddCityActivity extends AppCompatActivity {
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
-        new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_NOW+"?city="+city+"&key="+JSONCon.KEY, city, nowHandler).exe();
+        new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_WEATHER+"?city="+city+"&key="+JSONCon.KEY, city, nowHandler).exe();
     }
 
     private Handler nowHandler = new Handler(){
@@ -123,7 +124,11 @@ public class AddCityActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case HttpPost.POST_SUCCES:
-                    weatherDB.addCity(city, null, msg.getData().getString("response"), null, 0);
+                    AllResponse allResponse = new AllResponse();
+                    allResponse.setCity(city);
+                    allResponse.setReponse(msg.getData().getString("response"));
+                    allResponse.setIsLocation(0);
+                    weatherDB.addCity(allResponse);
                     Toast.makeText(AddCityActivity.this, "添加成功",Toast.LENGTH_SHORT).show();
                     jumpToManager();
                     break;

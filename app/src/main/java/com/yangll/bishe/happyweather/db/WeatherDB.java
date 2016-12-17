@@ -97,13 +97,11 @@ public class WeatherDB {
     }
 
     //新增一个城市并插入天气信息
-    public void addCity(String city, String forecast, String now, String suggestion, int islocation){
+    public void addCity(AllResponse allResponse){
         ContentValues values = new ContentValues();
-        values.put("city", city);
-        values.put("location", islocation);
-        values.put("forecast", forecast);
-        values.put("now", now);
-        values.put("suggestion", suggestion);
+        values.put("city", allResponse.getCity());
+        values.put("location", allResponse.getIsLocation());
+        values.put("response", allResponse.getReponse());
         db.insert("Weather", null, values);
     }
 
@@ -116,9 +114,7 @@ public class WeatherDB {
                 AllResponse allResponse = new AllResponse();
                 allResponse.setCity(cursor.getString(cursor.getColumnIndex("city")));
                 allResponse.setIsLocation(cursor.getInt(cursor.getColumnIndex("location")));
-                allResponse.setForecast(cursor.getString(cursor.getColumnIndex("forecast")));
-                allResponse.setNow(cursor.getString(cursor.getColumnIndex("now")));
-                allResponse.setSuggestion(cursor.getString(cursor.getColumnIndex("suggestion")));
+                allResponse.setReponse(cursor.getString(cursor.getColumnIndex("response")));
                 list.add(allResponse);
             }while (cursor.moveToNext());
         }
@@ -137,9 +133,7 @@ public class WeatherDB {
                 AllResponse allResponse = new AllResponse();
                 allResponse.setCity(cursor.getString(cursor.getColumnIndex("city")));
                 allResponse.setIsLocation(cursor.getInt(cursor.getColumnIndex("location")));
-                allResponse.setForecast(cursor.getString(cursor.getColumnIndex("forecast")));
-                allResponse.setNow(cursor.getString(cursor.getColumnIndex("now")));
-                allResponse.setSuggestion(cursor.getString(cursor.getColumnIndex("suggestion")));
+                allResponse.setReponse(cursor.getString(cursor.getColumnIndex("response")));
                 list.add(allResponse);
             }while (cursor.moveToNext());
         }
@@ -158,9 +152,7 @@ public class WeatherDB {
                 AllResponse allResponse = new AllResponse();
                 allResponse.setCity(cursor.getString(cursor.getColumnIndex("city")));
                 allResponse.setIsLocation(cursor.getInt(cursor.getColumnIndex("location")));
-                allResponse.setForecast(cursor.getString(cursor.getColumnIndex("forecast")));
-                allResponse.setNow(cursor.getString(cursor.getColumnIndex("now")));
-                allResponse.setSuggestion(cursor.getString(cursor.getColumnIndex("suggestion")));
+                allResponse.setReponse(cursor.getString(cursor.getColumnIndex("response")));
                 list.add(allResponse);
             }while (cursor.moveToNext());
         }
@@ -175,24 +167,10 @@ public class WeatherDB {
         db.delete("Weather", "city = ?", new String[]{city});
     }
 
-    //更新城市的七天预报天气信息
-    public void  updateForecastResponse(String city, String forecast){
+    //更新指定城市的天气信息
+    public void  updateWeatherResponse(String city, String response){
         ContentValues contentValues = new ContentValues();
-        contentValues.put("forecast", forecast);
-        db.update("Weather", contentValues, "city = ?", new String[]{city});
-    }
-
-    //更新城市的当前预报天气信息
-    public void updateNowResponse(String city, String now){
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("now", now);
-        db.update("Weather", contentValues, "city = ?", new String[]{city});
-    }
-
-    //更新城市的天气建议信息
-    public void updateSuggestionResponse(String city, String suggestion){
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("suggestion", suggestion);
+        contentValues.put("response", response);
         db.update("Weather", contentValues, "city = ?", new String[]{city});
     }
 

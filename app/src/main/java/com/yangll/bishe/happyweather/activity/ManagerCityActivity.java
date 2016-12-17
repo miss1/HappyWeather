@@ -55,8 +55,6 @@ public class ManagerCityActivity extends AppCompatActivity {
 
     private ActionBar ab;
 
-    private ProgressBar progressBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,9 +68,6 @@ public class ManagerCityActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_manager_city);
         ButterKnife.bind(this);
-
-        MyProgressBar myProgressBar = new MyProgressBar();
-        progressBar = myProgressBar.createMyProgressBar(this,null);
 
         if (!WeatherUtil.bg.equals("")){
             bg.setBackgroundResource(WeatherUtil.getWeatherBg(WeatherUtil.bg));
@@ -92,7 +87,7 @@ public class ManagerCityActivity extends AppCompatActivity {
         adapter.setOnRecyclerViewListener(new OnRecyclerViewListener() {
             @Override
             public void onItemClick(int position) {
-
+                WeatherDetailActivity.actionStart(ManagerCityActivity.this, weathers.get(position).getBasic().getCity());
             }
 
             @Override
@@ -107,9 +102,9 @@ public class ManagerCityActivity extends AppCompatActivity {
     private void initData() {
         weathers.clear();
         for (AllResponse all:allResponses){
-            if (all.getNow() != null){
+            if (all.getReponse() != null){
                 Gson gson = new Gson();
-                WeatherJson weatherJson = gson.fromJson(all.getNow(), WeatherJson.class);
+                WeatherJson weatherJson = gson.fromJson(all.getReponse(), WeatherJson.class);
                 weathers.add(weatherJson.getHeWeather5().get(0));
             }
         }
@@ -117,30 +112,6 @@ public class ManagerCityActivity extends AppCompatActivity {
         adapter.bindDatas(weathers);
         adapter.notifyDataSetChanged();
     }
-
-    //更新所有添加城市的当前预报
-    private void refreshAllNow(){
-        progressBar.setVisibility(View.VISIBLE);
-        for(AllResponse resp : weatherDB.getAllResponses()){
-            new HttpPost(JSONCon.SERVER_URL+JSONCon.PATH_NOW+"?city="+resp.getCity()+"&key="+JSONCon.KEY, resp.getCity(), nowHandler).exe();
-        }
-    }
-
-    private Handler nowHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case HttpPost.POST_SUCCES:
-                    weatherDB.updateNowResponse(msg.getData().getString("cityname"), msg.getData().getString("response"));
-                    break;
-                case HttpPost.POST_LOGIC_ERROR:
-                    break;
-            }
-            super.handleMessage(msg);
-            progressBar.setVisibility(View.GONE);
-            initData();
-        }
-    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -159,9 +130,6 @@ public class ManagerCityActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 break;
-            case R.id.id_action_refresh:
-                refreshAllNow();
-                break;
             case R.id.id_action_delete:
                 final AlertDialog builder = new AlertDialog(ManagerCityActivity.this).builder();
                 builder.setTitle("删除城市");
@@ -172,6 +140,10 @@ public class ManagerCityActivity extends AppCompatActivity {
                         String delcity = builder.getDeleteCity();
                         if (weatherDB.getCityResponse(delcity).size() <= 0){
                             Toast.makeText(ManagerCityActivity.this, "该城市不在列表中",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (weatherDB.getCityResponse(delcity).get(0).getIsLocation() == 1){
+                            Toast.makeText(ManagerCityActivity.this, "该城市为当前所在城市，不能移除",Toast.LENGTH_SHORT).show();
                             return;
                         }
                         weatherDB.deleteCityResponse(delcity);

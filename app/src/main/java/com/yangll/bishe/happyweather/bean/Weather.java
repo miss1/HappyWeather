@@ -12,6 +12,7 @@ public class Weather {
     private String status;
     private List<DailyForecast> daily_forecast;
     private Now now;
+    private Suggestion suggestion;
 
     public Basic getBasic() {
         return basic;
@@ -43,5 +44,13 @@ public class Weather {
 
     public void setNow(Now now) {
         this.now = now;
+    }
+
+    public Suggestion getSuggestion() {
+        return suggestion;
+    }
+
+    public void setSuggestion(Suggestion suggestion) {
+        this.suggestion = suggestion;
     }
 }

@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class WeatherOpenHelper extends SQLiteOpenHelper {
 
-    public static final String CREATE_CITY = "create table City ("        //weather表
+    public static final String CREATE_CITY = "create table City ("        //city表
             + "id integer primary key autoincrement, "
             + "cityId text, "
             + "cityZh text, "
@@ -22,9 +22,7 @@ public class WeatherOpenHelper extends SQLiteOpenHelper {
             + "id integer primary key autoincrement, "
             + "city text, "
             + "location integer, "
-            + "forecast text, "
-            + "now text, "
-            + "suggestion text)";
+            + "response text)";
 
     public WeatherOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
