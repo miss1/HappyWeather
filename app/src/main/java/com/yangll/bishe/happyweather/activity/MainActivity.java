@@ -311,6 +311,9 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                     if(mToolBarTextView.getText().toString().equals(city)){
                         showWeather(response, city, msg.arg1);
                     }
+                    //发送广播通知widget更新
+                    Intent intent = new Intent().setAction(JSONCon.BRODCAST_UPDATE);
+                    MainActivity.this.sendBroadcast(intent);
                     break;
                 case HttpPost.POST_LOGIC_ERROR:
                     Toast.makeText(MainActivity.this, (String) msg.obj,Toast.LENGTH_SHORT).show();

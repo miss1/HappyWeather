@@ -42,12 +42,28 @@
         <service android:name="com.amap.api.location.APSService" />
 
         <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.AddCityActivity"
+        <activity
+            android:name=".activity.AddCityActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".activity.WeatherDetailActivity" />
-        <activity android:name=".activity.ManagerCityActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+        <activity
+            android:name=".activity.ManagerCityActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <receiver android:name=".widget.WeatherAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/weather_app_widget_info" />
+
+            <intent-filter>
+                <action android:name="com.yang.bishe.appwidget" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

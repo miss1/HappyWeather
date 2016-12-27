@@ -12,4 +12,7 @@ public class JSONCon {
     public static final String PATH_WEATHER = "/weather";
 
     public static final String KEY = "46ffe7931e3f4da38a47fa1554abcd59";
+
+    //广播
+    public static final String BRODCAST_UPDATE = "com.yang.bishe.appwidget";
 }
