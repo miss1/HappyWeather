@@ -247,6 +247,14 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                     initData(locationcity, 1);
                 }
 
+            }else {            //定位失败
+                if (weatherDB.getAllResponses().size() > 0 && weatherDB.getLocationCityResponse(1).size() > 0){
+                    mToolBarTextView.setText(weatherDB.getLocationCityResponse(1).get(0).getCity());
+                    refreshAllWeather();
+                }else {
+                    initData("北京", 1);
+                }
+                Toast.makeText(MainActivity.this, "定位失败", Toast.LENGTH_LONG).show();
             }
         }
     }

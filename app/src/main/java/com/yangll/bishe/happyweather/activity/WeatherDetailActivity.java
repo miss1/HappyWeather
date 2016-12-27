@@ -139,7 +139,7 @@ public class WeatherDetailActivity extends AppCompatActivity {
         detail_wind.setText("风力风向："+weather.getNow().getWind().getDir()+weather.getNow().getWind().getSc() + "级");
         detail_pcpn.setText("降水量："+weather.getNow().getPcpn() + "mm");
         detail_vis.setText("能见度："+weather.getNow().getVis() + "km");
-        detail_img.setBackgroundResource(WeatherUtil.getWeatherIcon(weather.getDaily_forecast().get(0).getCond().getCode_d()));
+        detail_img.setBackgroundResource(WeatherUtil.getWeatherIcon(weather.getNow().getCond().getCode()));
         detail_comf.setBackgroundColor(Color.parseColor("#7f0080ff"));
         suggtion_brf.setText(weather.getSuggestion().getComf().getBrf());
         suggtion_txt.setText(weather.getSuggestion().getComf().getTxt());
