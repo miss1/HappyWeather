@@ -64,6 +64,8 @@
                 <action android:name="com.yang.bishe.appwidget" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".activity.HistoryInToday"></activity>
     </application>
 
 </manifest>

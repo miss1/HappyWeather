@@ -1,5 +1,6 @@
 package com.yangll.bishe.happyweather.http;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -90,6 +91,28 @@ public class HttpPost {
                         msg.obj = response;
                         break;
                 }
+                mHandler.sendMessage(msg);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Message msg = new Message();
+                msg.what = POST_LOGIC_ERROR;
+                msg.obj = e.getMessage().toString();
+                Log.e("Tag", e.getMessage().toString());
+                mHandler.sendMessage(msg);
+            }
+        });
+    }
+
+    public void imgexe(){
+        HttpUtil.getUrlImg(address, new HttpImgCallbackListener() {
+
+            @Override
+            public void onFinish(Bitmap bmp) {
+                Message msg = new Message();
+                msg.what = POST_SUCCES;
+                msg.obj = bmp;
                 mHandler.sendMessage(msg);
             }
 

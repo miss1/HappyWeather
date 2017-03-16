@@ -15,4 +15,9 @@ public class JSONCon {
 
     //广播
     public static final String BRODCAST_UPDATE = "com.yang.bishe.appwidget";
+
+    //历史上的今天
+    public static final String H_SERVER_URL = "http://v.juhe.cn/todayOnhistory/queryEvent.php";
+    public static final String H_DETAIL_SERVER_URL = "http://v.juhe.cn/todayOnhistory/queryDetail.php";
+    public static final String H_KEY = "b293da1aec89ab609f0615c00106065c";
 }

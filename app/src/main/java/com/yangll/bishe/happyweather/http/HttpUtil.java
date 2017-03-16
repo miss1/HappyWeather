@@ -1,9 +1,13 @@
 package com.yangll.bishe.happyweather.http;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class HttpUtil {
@@ -42,5 +46,39 @@ public class HttpUtil {
 			}
 		}).start();
 	}
+
+	//获取网络图片
+	public static void getUrlImg(final String address, final HttpImgCallbackListener listener){
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                HttpURLConnection connection=null;
+                Bitmap bmp=null;
+                try {
+                    URL url = new URL(address);
+                    connection=(HttpURLConnection) url.openConnection();
+                    connection.setConnectTimeout(6000);
+                    connection.setDoInput(true);
+                    connection.setUseCaches(false);
+                    connection.connect();
+                    InputStream is = connection.getInputStream();
+                    bmp = BitmapFactory.decodeStream(is);
+                    is.close();
+                    if (listener != null){
+                        listener.onFinish(bmp);
+                    }
+                } catch (Exception e) {
+                    if (listener != null){
+                        listener.onError(e);
+                    }
+                }finally {
+                    if(connection != null){
+                        connection.disconnect();
+                    }
+                }
+            }
+        }).start();
+    }
 
 }

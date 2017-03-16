@@ -40,6 +40,7 @@ import com.yangll.bishe.happyweather.bean.WeatherJson;
 import com.yangll.bishe.happyweather.db.WeatherDB;
 import com.yangll.bishe.happyweather.http.HttpPost;
 import com.yangll.bishe.happyweather.http.JSONCon;
+import com.yangll.bishe.happyweather.view.FourPartDialog;
 import com.yangll.bishe.happyweather.view.MyProgressBar;
 import com.yangll.bishe.happyweather.http.WeatherUtil;
 import com.yangll.bishe.happyweather.view.SpinerPopWindow;
@@ -190,15 +191,51 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
-        mToolbar.setNavigationIcon(R.drawable.refresh);
+        mToolbar.setNavigationIcon(R.drawable.home);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                refreshAllWeather();
+                //弹出四格选择框
+                alertFDialog();
             }
         });
         mToolBarTextView.setText(cityname);
+    }
+
+    //弹出四格选择框
+    private void alertFDialog(){
+        new FourPartDialog(MainActivity.this).builder()
+                .setWeatherPKBtn(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setWeatherLineBtn(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setWeatherGameBtn(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setHistoryTodayBtn(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(MainActivity.this, HistoryInToday.class);
+                        startActivity(intent);
+                    }
+                })
+                .setCloseBtn(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                }).show();
     }
 
     //点击顶部城市名称弹出下拉框切换城市
