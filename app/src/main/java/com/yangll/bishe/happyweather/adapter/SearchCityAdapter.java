@@ -17,8 +17,10 @@ public class SearchCityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private List<City> cities = new ArrayList<>();
     private OnRecyclerViewListener onRecyclerViewListener;
 
-    public SearchCityAdapter(){
+    private String txtcolor;
 
+    public SearchCityAdapter(String txtcolor){
+        this.txtcolor = txtcolor;
     }
 
     public void bindDatas(List<City> list){
@@ -38,7 +40,7 @@ public class SearchCityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new SearchCityHolder(parent.getContext(), parent, onRecyclerViewListener);
+        return new SearchCityHolder(parent.getContext(), parent, onRecyclerViewListener, txtcolor);
     }
 
     @Override

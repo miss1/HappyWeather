@@ -208,7 +208,8 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                 .setWeatherPKBtn(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        Intent intent = new Intent(MainActivity.this, WeatherPkActivity.class);
+                        startActivity(intent);
                     }
                 })
                 .setWeatherLineBtn(new View.OnClickListener() {

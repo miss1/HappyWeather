@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_weather_pk"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.yangll.bishe.happyweather.activity.WeatherPkActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/pktitle"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="选择PK城市"
+            android:textColor="#fff"
+            android:textSize="24sp"
+            android:gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp">
+            <TextView
+                android:id="@+id/pk_leftcity"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="？"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_gravity="bottom"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pk3" />
+            <TextView
+                android:id="@+id/pk_rightcity"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="？"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_gravity="bottom"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/pk_begin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="开始PK"
+            android:textColor="#fff"
+            android:textSize="24sp"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/pk_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/pkclose"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"/>
+</RelativeLayout>

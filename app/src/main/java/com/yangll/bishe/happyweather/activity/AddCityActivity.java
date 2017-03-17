@@ -76,7 +76,7 @@ public class AddCityActivity extends AppCompatActivity {
 
         weatherDB = WeatherDB.getInstance(this);
 
-        adapter = new SearchCityAdapter();
+        adapter = new SearchCityAdapter("white");
         linearLayoutManager = new LinearLayoutManager(AddCityActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
