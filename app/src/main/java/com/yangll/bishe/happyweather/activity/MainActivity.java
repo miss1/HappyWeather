@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                 .setWeatherLineBtn(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        LineChartActivity.actioStart(MainActivity.this, mToolBarTextView.getText().toString());
                     }
                 })
                 .setWeatherGameBtn(new View.OnClickListener() {

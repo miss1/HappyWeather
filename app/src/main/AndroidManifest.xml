@@ -65,7 +65,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.HistoryInToday"></activity>
+        <activity android:name=".activity.HistoryInToday" />
+        <activity android:name=".activity.LineChartActivity"></activity>
     </application>
 
 </manifest>

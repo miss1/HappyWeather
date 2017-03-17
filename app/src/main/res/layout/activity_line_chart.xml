@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_line_chart"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.yangll.bishe.happyweather.activity.LineChartActivity">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:id="@+id/line_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Weather Forecast"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/line_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="海口市"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"/>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="最高温度"
+                android:textSize="18sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#fff"/>
+
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/line_maxtmp"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="最低温度"
+                android:textSize="18sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="#fff"/>
+
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/line_mintmp"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="日出时间"
+                android:textSize="18sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#fff"/>
+
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/line_sr"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="日落时间"
+                android:textSize="18sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#fff"/>
+
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/line_ss"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="能见度"
+                android:textSize="18sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#fff"/>
+
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/line_vis"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

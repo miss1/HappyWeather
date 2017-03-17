@@ -12,6 +12,8 @@ public class DailyForecast {
     private String hum;             //相对湿度（%）
     private Tmp tmp;                //温度
     private Wind wind;              //风力风向
+    private String vis;             //能见度
+    private Astro astro;
 
     private boolean isSeclect;      //是否选中
 
@@ -61,5 +63,21 @@ public class DailyForecast {
 
     public void setSeclect(boolean seclect) {
         isSeclect = seclect;
+    }
+
+    public String getVis() {
+        return vis;
+    }
+
+    public void setVis(String vis) {
+        this.vis = vis;
+    }
+
+    public Astro getAstro() {
+        return astro;
+    }
+
+    public void setAstro(Astro astro) {
+        this.astro = astro;
     }
 }
