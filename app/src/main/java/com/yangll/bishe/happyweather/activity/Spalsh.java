@@ -18,6 +18,8 @@ import com.yangll.bishe.happyweather.http.JSONCon;
 
 import java.util.List;
 
+import cn.bmob.v3.Bmob;
+
 public class Spalsh extends AppCompatActivity {
 
     private WeatherDB weatherDB;
@@ -26,6 +28,8 @@ public class Spalsh extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spalsh);
+
+        Bmob.initialize(this, JSONCon.APPLICATION_ID);
 
         weatherDB = WeatherDB.getInstance(this);
 

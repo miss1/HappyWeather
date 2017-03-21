@@ -30,8 +30,9 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.0.1'
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile 'com.google.code.gson:gson:2.8.0'
+    //compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.yalantis:contextmenu:1.0.7'
     compile files('libs/AMap_Location_V3.1.0_20161027.jar')
     compile files('libs/hellocharts-library-1.5.8.jar')
+    compile 'cn.bmob.android:bmob-sdk:3.5.0'
 }

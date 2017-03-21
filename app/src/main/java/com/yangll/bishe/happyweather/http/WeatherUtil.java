@@ -1,5 +1,7 @@
 package com.yangll.bishe.happyweather.http;
 
+import android.content.Context;
+
 import com.yangll.bishe.happyweather.R;
 
 /**
@@ -9,6 +11,14 @@ import com.yangll.bishe.happyweather.R;
 public class WeatherUtil {
 
     public static String bg = "";
+
+    /*
+    * dip转换成pix
+    */
+    public static int dip2px(Context context, float dpvalue){
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int)(dpvalue * scale + 0.5f);
+    }
 
     /*
     * 将时间去掉年份显示出来
