@@ -34,7 +34,7 @@ public class HistoryInTodayHolder extends BaseViewHolder {
     @Override
     public void bindData(Object o) {
         ViewGroup.LayoutParams lp = h_item_bg.getLayoutParams();
-        lp.height = (int) (210 + Math.random() * 250);
+        lp.height = (int) (230 + Math.random() * 250);
 
         h_item_bg.setBackgroundResource(bg[(int)(Math.random()*4)]);
 

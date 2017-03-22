@@ -36,7 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HistoryInToday extends AppCompatActivity {
+public class HistoryInTodayActivity extends AppCompatActivity {
 
     @BindView(R.id.activity_history_in_today)
     LinearLayout activity_history_in_today;
@@ -145,7 +145,7 @@ public class HistoryInToday extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                     break;
                 case HttpPost.POST_LOGIC_ERROR:
-                    Toast.makeText(HistoryInToday.this, (String) msg.obj,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryInTodayActivity.this, (String) msg.obj,Toast.LENGTH_SHORT).show();
                     break;
             }
             progressBar.setVisibility(View.GONE);
@@ -172,7 +172,7 @@ public class HistoryInToday extends AppCompatActivity {
                     updataPageDetail();
                     break;
                 case HttpPost.POST_LOGIC_ERROR:
-                    Toast.makeText(HistoryInToday.this, (String) msg.obj,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryInTodayActivity.this, (String) msg.obj,Toast.LENGTH_SHORT).show();
                     break;
             }
             progressBar.setVisibility(View.GONE);
@@ -211,7 +211,7 @@ public class HistoryInToday extends AppCompatActivity {
                     h_detail_img.setImageBitmap(bmp);
                     break;
                 case HttpPost.POST_LOGIC_ERROR:
-                    Toast.makeText(HistoryInToday.this, (String) msg.obj,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryInTodayActivity.this, (String) msg.obj,Toast.LENGTH_SHORT).show();
                     break;
             }
             super.handleMessage(msg);

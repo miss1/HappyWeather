@@ -221,13 +221,14 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                 .setWeatherGameBtn(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        Intent intent = new Intent(MainActivity.this, PuzzleGameActivity.class);
+                        startActivity(intent);
                     }
                 })
                 .setHistoryTodayBtn(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(MainActivity.this, HistoryInToday.class);
+                        Intent intent = new Intent(MainActivity.this, HistoryInTodayActivity.class);
                         startActivity(intent);
                     }
                 })

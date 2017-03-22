@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 用于申请调用A-GPS模块 -->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <!--保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
+    <!-- 保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -67,10 +67,11 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.HistoryInToday" />
+        <activity android:name=".activity.HistoryInTodayActivity" />
         <activity android:name=".activity.LineChartActivity" />
         <activity android:name=".activity.WeatherPkActivity" />
-        <activity android:name=".activity.WeatherPkActivity2"></activity>
+        <activity android:name=".activity.WeatherPkActivity2" />
+        <activity android:name=".activity.PuzzleGameActivity"></activity>
     </application>
 
 </manifest>
