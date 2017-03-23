@@ -1,8 +1,9 @@
 package com.yangll.bishe.happyweather.adapter;
 
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
+
+import com.yangll.bishe.happyweather.bean.puzzle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,21 +14,21 @@ import java.util.List;
 
 public class GameAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Bitmap> lists = new ArrayList<>();
+    private List<puzzle> lists = new ArrayList<>();
     private OnRecyclerViewListener onRecyclerViewListener;
 
     public GameAdapter(){
 
     }
 
-    public void bindDatas(List<Bitmap> list){
+    public void bindDatas(List<puzzle> list){
         lists.clear();
         if (null != list){
             lists.addAll(list);
         }
     }
 
-    public Bitmap getItem(int position){
+    public puzzle getItem(int position){
         return lists.get(position);
     }
 

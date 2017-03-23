@@ -16,6 +16,7 @@ public class JSONCon {
 
     //广播
     public static final String BRODCAST_UPDATE = "com.yang.bishe.appwidget";
+    public static final String PUZZLE_SUCCESS = "com.yang.bishe.puzzlesuccess";
 
     //历史上的今天
     public static final String H_SERVER_URL = "http://v.juhe.cn/todayOnhistory/queryEvent.php";

@@ -1,6 +1,7 @@
 package com.yangll.bishe.happyweather.view.gameview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -12,11 +13,13 @@ import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.yangll.bishe.happyweather.R;
+import com.yangll.bishe.happyweather.http.JSONCon;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -89,11 +92,17 @@ public class GamePintuLayout extends RelativeLayout implements OnClickListener
 				getPaddingBottom());
 	}
 
+	//切换 图片
 	public void setBitmap(Bitmap mBitmap)
 	{
+		this.removeAllViews();
+		mAnimLayout = null;
 		this.mBitmap = mBitmap;
+		initBitmap();
+		initItem(false);
 	}
 
+	//开始游戏
 	public void startGame(){
 		Collections.sort(mItemBitmaps, new Comparator<ImagePiece>()
 		{
@@ -107,6 +116,14 @@ public class GamePintuLayout extends RelativeLayout implements OnClickListener
 		initItem(true);
 	}
 
+	//复原
+	public void reSetGame(){
+		this.removeAllViews();
+		mAnimLayout = null;
+		initBitmap();
+		initItem(false);
+	}
+
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
 	{
@@ -115,11 +132,11 @@ public class GamePintuLayout extends RelativeLayout implements OnClickListener
 		// 获得游戏布局的边长
 		mWidth = Math.min(getMeasuredHeight(), getMeasuredWidth());
 
-		if (!once)
+		/*if (!once)
 		{
 			initBitmap();
 			initItem(false);
-		}
+		}*/
 		once = true;
 		setMeasuredDimension(mWidth, mWidth);
 	}
@@ -352,17 +369,22 @@ public class GamePintuLayout extends RelativeLayout implements OnClickListener
 
 		if (isSuccess)
 		{
-			Toast.makeText(getContext(), "Success , Level Up !",
-					Toast.LENGTH_LONG).show();
-			nextLevel();
+			//nextLevel();
+			//发送广播，通知游戏界面游戏成功
+			Intent intent = new Intent(JSONCon.PUZZLE_SUCCESS);
+			getContext().sendBroadcast(intent);
 		}
 	}
 
-	public void nextLevel()
+	public void nextLevel(Button game_level)
 	{
 		this.removeAllViews();
 		mAnimLayout = null;
 		mColumn++;
+		if (mColumn > 6){
+			mColumn = 3;
+		}
+		game_level.setText("level: " + mColumn + "x" + mColumn);
 		initBitmap();
 		initItem(false);
 	}

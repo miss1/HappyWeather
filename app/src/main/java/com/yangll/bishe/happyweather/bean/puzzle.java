@@ -8,13 +8,23 @@ import cn.bmob.v3.datatype.BmobFile;
  */
 
 public class puzzle extends BmobObject {
-    private BmobFile img;
+     private String img;
 
-    public BmobFile getImg() {
+    private boolean isSelect;
+
+    public String getImg() {
         return img;
     }
 
-    public void setImg(BmobFile img) {
+    public void setImg(String img) {
         this.img = img;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 }
