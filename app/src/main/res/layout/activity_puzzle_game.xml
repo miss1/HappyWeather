@@ -33,22 +33,19 @@
         android:layout_height="100dp"
         android:layout_alignParentBottom="true">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/game_chooselist"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
+        <com.yangll.bishe.happyweather.view.HorizontalRefreshLayout
+            android:id="@+id/refersh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/game_chooselist"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:scrollbars="none">
 
-        <ImageView
-            android:id="@+id/game_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/loading"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@id/game_chooselist"/>
+            </android.support.v7.widget.RecyclerView>
+        </com.yangll.bishe.happyweather.view.HorizontalRefreshLayout>
     </RelativeLayout>
 
     <ScrollView

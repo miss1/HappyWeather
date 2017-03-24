@@ -69,6 +69,9 @@ public class GamePintuLayout extends RelativeLayout implements OnClickListener
 	 */
 	private List<ImagePiece> mItemBitmaps;
 
+	private Button count;   //计数显示
+	private int gamecount = 0;   //游戏的步数
+
 	private boolean once;
 
 	public GamePintuLayout(Context context)
@@ -92,6 +95,11 @@ public class GamePintuLayout extends RelativeLayout implements OnClickListener
 				getPaddingBottom());
 	}
 
+	//计数的控件
+	public void setCount(Button count){
+		this.count = count;
+	}
+
 	//切换 图片
 	public void setBitmap(Bitmap mBitmap)
 	{
@@ -100,6 +108,9 @@ public class GamePintuLayout extends RelativeLayout implements OnClickListener
 		this.mBitmap = mBitmap;
 		initBitmap();
 		initItem(false);
+
+		gamecount = 0;
+		count.setText("步数: " + gamecount);
 	}
 
 	//开始游戏
@@ -114,6 +125,9 @@ public class GamePintuLayout extends RelativeLayout implements OnClickListener
 		});
 		this.removeAllViews();
 		initItem(true);
+
+		gamecount = 0;
+		count.setText("步数: " + gamecount);
 	}
 
 	//复原
@@ -122,6 +136,9 @@ public class GamePintuLayout extends RelativeLayout implements OnClickListener
 		mAnimLayout = null;
 		initBitmap();
 		initItem(false);
+
+		gamecount = 0;
+		count.setText("步数: " + gamecount);
 	}
 
 	@Override
@@ -344,11 +361,20 @@ public class GamePintuLayout extends RelativeLayout implements OnClickListener
 				mSecond.setVisibility(VISIBLE);
 				mFirst = mSecond = null;
 				mAnimLayout.removeAllViews();
+				cumulateCount();
 				checkSuccess();
 				isAniming = false;
 			}
 		});
 
+	}
+
+	/**
+	 * 计算游戏的步数（计分）
+	 */
+	private void cumulateCount(){
+		gamecount += 1;
+		count.setText("步数: " + gamecount);
 	}
 
 	/**
@@ -387,6 +413,9 @@ public class GamePintuLayout extends RelativeLayout implements OnClickListener
 		game_level.setText("level: " + mColumn + "x" + mColumn);
 		initBitmap();
 		initItem(false);
+
+		gamecount = 0;
+		count.setText("步数: " + gamecount);
 	}
 
 	/**

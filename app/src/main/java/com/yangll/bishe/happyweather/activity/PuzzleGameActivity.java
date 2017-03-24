@@ -7,13 +7,14 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -26,16 +27,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
 import com.yangll.bishe.happyweather.R;
 import com.yangll.bishe.happyweather.adapter.GameAdapter;
 import com.yangll.bishe.happyweather.adapter.OnRecyclerViewListener;
 import com.yangll.bishe.happyweather.bean.knowledge;
 import com.yangll.bishe.happyweather.bean.puzzle;
-import com.yangll.bishe.happyweather.http.HttpPost;
 import com.yangll.bishe.happyweather.http.JSONCon;
+import com.yangll.bishe.happyweather.http.OnLoadListener;
 import com.yangll.bishe.happyweather.http.WeatherUtil;
 import com.yangll.bishe.happyweather.view.AlertDialog;
+import com.yangll.bishe.happyweather.view.HorizontalRefreshLayout;
 import com.yangll.bishe.happyweather.view.MyProgressBar;
 import com.yangll.bishe.happyweather.view.gameview.GamePintuLayout;
 
@@ -54,9 +55,6 @@ public class PuzzleGameActivity extends AppCompatActivity {
 
     @BindView(R.id.activity_puzzle_game)
     RelativeLayout activity_puzzle_game;
-
-    @BindView(R.id.game_loading)
-    ImageView game_loading;
 
     @BindView(R.id.game_chooselist)
     RecyclerView game_chooselist;
@@ -82,6 +80,9 @@ public class PuzzleGameActivity extends AppCompatActivity {
     @BindView(R.id.game_success_tips)
     TextView game_success_tips;
 
+    @BindView(R.id.refersh_layout)
+    HorizontalRefreshLayout refersh_layout;
+
     private GameAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
 
@@ -91,9 +92,9 @@ public class PuzzleGameActivity extends AppCompatActivity {
 
     private int count = 0;
     private int limit = 7;
-    private int length = 0;
 
     private Bitmap prisentBitmap;
+    private String prisentImgurl;
 
     private SharedPreferences sharedPreferences;
 
@@ -109,15 +110,13 @@ public class PuzzleGameActivity extends AppCompatActivity {
 
         sharedPreferences = this.getSharedPreferences("puzzle", MODE_PRIVATE);
 
-        //设置加载动画
-        Animation animiation = AnimationUtils.loadAnimation(this, R.anim.img_animation);
-        LinearInterpolator lin = new LinearInterpolator(); //设置动画匀速运动
-        animiation.setInterpolator(lin);
-        game_loading.startAnimation(animiation);
+        game_view.setCount(game_count);
 
+        //下载图片提示
         MyProgressBar myProgressBar = new MyProgressBar();
         progressBar = myProgressBar.createMyProgressBar(this, null);
 
+        //横向滚动条相关
         adapter = new GameAdapter();
         linearLayoutManager = new LinearLayoutManager(PuzzleGameActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -128,7 +127,9 @@ public class PuzzleGameActivity extends AppCompatActivity {
         adapter.setOnRecyclerViewListener(new OnRecyclerViewListener() {
             @Override
             public void onItemClick(int position) {
-                changeImg(position);
+                if (position < urlLists.size()){
+                    changeImg(position);
+                }
             }
 
             @Override
@@ -137,8 +138,21 @@ public class PuzzleGameActivity extends AppCompatActivity {
             }
         });
 
+        //左滑刷新
+        refersh_layout.setAdapter(adapter);
+        refersh_layout.setOnLoadListener(new OnLoadListener() {
+            @Override
+            public void onLoad() {
+                qurtyImgFile();
+            }
+        });
+
+        //从服务器查询图片文件的地址
+        View mRecycleViewFooter = LayoutInflater.from(this).inflate(R.layout.recycleview_footer, game_chooselist, false);
+        adapter.setFooterView(mRecycleViewFooter);
         qurtyImgFile();
 
+        //注册广播，接收游戏完成的广播
         IntentFilter filter = new IntentFilter(JSONCon.PUZZLE_SUCCESS);
         registerReceiver(broadcastReceiver, filter);
     }
@@ -182,6 +196,7 @@ public class PuzzleGameActivity extends AppCompatActivity {
                 try {
                     Bitmap bitmap = Glide.with(PuzzleGameActivity.this).load(urlLists.get(position).getImg())
                             .asBitmap().centerCrop().into(300, 300).get();
+                    prisentImgurl = urlLists.get(position).getImg();
                     Message msg = new Message();
                     msg.what = 1;
                     msg.obj = bitmap;
@@ -206,8 +221,7 @@ public class PuzzleGameActivity extends AppCompatActivity {
                 if (bitmap != null){
                     game_view.setBitmap(bitmap);
                     prisentBitmap = bitmap;
-                    Log.e("bitmap", new BitmapDrawable(prisentBitmap).toString());
-                    if (sharedPreferences.getBoolean(prisentBitmap.toString(), false)){
+                    if (sharedPreferences.getBoolean(prisentImgurl+"boolean", false)){
                         game_show.setClickable(true);
                         game_show.setBackgroundResource(R.drawable.a_selector_blue_button);
                     }else {
@@ -221,7 +235,7 @@ public class PuzzleGameActivity extends AppCompatActivity {
         }
     };
 
-    //从服务器查询图片文件
+    //从服务器查询图片文件的地址,每次返回七条结果
     private void qurtyImgFile(){
         BmobQuery<puzzle> query = new BmobQuery<>();
         query.setSkip(count);
@@ -230,18 +244,23 @@ public class PuzzleGameActivity extends AppCompatActivity {
             @Override
             public void done(List<puzzle> list, BmobException e) {
                 if (e == null){
-                    if (list.size() != 0){
-                        urlLists.addAll(list);
-                        if (count == 0){
-                            loadImg(0);
-                            initSelection(0);
-                        }
-                        adapter.bindDatas(urlLists);
-                        adapter.notifyDataSetChanged();
+                    urlLists.addAll(list);
+                    if (count == 0){
+                        loadImg(0);
+                        initSelection(0);
+                    }
+                    adapter.bindDatas(urlLists);
+                    adapter.notifyDataSetChanged();
+                    refersh_layout.setLoading(false);
+
+                    if (list.size() == 7){
                         count += limit;
+                    }else if (list.size() < 7){
+                        count += list.size();
                     }
                 }else {
                     Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                   adapter.setFooterView(null);
                 }
             }
         });
@@ -311,17 +330,24 @@ public class PuzzleGameActivity extends AppCompatActivity {
         if (game_show.getText().equals("show")){
             game_view.setVisibility(View.GONE);
             game_success.setVisibility(View.VISIBLE);
+
             game_begin.setClickable(false);
             game_level.setClickable(false);
+            game_begin.setBackgroundResource(0);
+            game_level.setBackgroundResource(0);
+
             game_show.setText("back");
             game_success.setBackground(new BitmapDrawable(prisentBitmap));
-            game_success_tips.setText(sharedPreferences.getString(prisentBitmap.toString(), ""));
+            game_success_tips.setText(sharedPreferences.getString(prisentImgurl, ""));
         }else {
             game_show.setText("show");
             game_view.setVisibility(View.VISIBLE);
             game_success.setVisibility(View.GONE);
+
             game_begin.setClickable(true);
             game_level.setClickable(true);
+            game_begin.setBackgroundResource(R.drawable.a_selector_blue_button);
+            game_level.setBackgroundResource(R.drawable.a_selector_blue_button);
         }
     }
 
@@ -335,9 +361,9 @@ public class PuzzleGameActivity extends AppCompatActivity {
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (!sharedPreferences.getBoolean(prisentBitmap.toString(), false)){
+            if (!sharedPreferences.getBoolean(prisentImgurl+"boolean", false)){
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(prisentBitmap.toString(), true);
+                editor.putBoolean(prisentImgurl+"boolean", true);
                 editor.commit();
             }
             queryKnowledge();
@@ -360,10 +386,9 @@ public class PuzzleGameActivity extends AppCompatActivity {
             public void done(List<knowledge> list, BmobException e) {
                 if (e == null){
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(prisentBitmap.toString(), list.get(0).getContent());
+                    editor.putString(prisentImgurl, list.get(0).getContent());
                     editor.commit();
                     Log.e("tips:", list.get(0).getContent());
-                    Log.e("bitmap1", new BitmapDrawable(prisentBitmap).toString());
                 }else {
                     Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
                 }
@@ -376,4 +401,5 @@ public class PuzzleGameActivity extends AppCompatActivity {
         unregisterReceiver(broadcastReceiver);
         super.onDestroy();
     }
+
 }
