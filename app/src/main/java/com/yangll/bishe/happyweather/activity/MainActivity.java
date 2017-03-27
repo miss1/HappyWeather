@@ -472,7 +472,8 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                 WeatherDetailActivity.actionStart(MainActivity.this, mToolBarTextView.getText().toString());
                 break;
             case 3:
-                intent.setClass(MainActivity.this, ManagerCityActivity.class);
+                //intent.setClass(MainActivity.this, ManagerCityActivity.class);
+                intent.setClass(MainActivity.this, ManagerCityActivity2.class);
                 startActivity(intent);
                 break;
         }

@@ -143,7 +143,7 @@ public class AddCityActivity extends AppCompatActivity {
 
     //跳转到管理城市界面，并注销当前界面
     private void jumpToManager() {
-        Intent intent = new Intent(AddCityActivity.this, ManagerCityActivity.class);
+        Intent intent = new Intent(AddCityActivity.this, ManagerCityActivity2.class);
         startActivity(intent);
         finish();
     }

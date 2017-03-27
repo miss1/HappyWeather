@@ -71,7 +71,8 @@
         <activity android:name=".activity.LineChartActivity" />
         <activity android:name=".activity.WeatherPkActivity" />
         <activity android:name=".activity.WeatherPkActivity2" />
-        <activity android:name=".activity.PuzzleGameActivity"></activity>
+        <activity android:name=".activity.PuzzleGameActivity" />
+        <activity android:name=".activity.ManagerCityActivity2"></activity>
     </application>
 
 </manifest>

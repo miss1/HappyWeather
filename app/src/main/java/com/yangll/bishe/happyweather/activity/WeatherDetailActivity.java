@@ -202,6 +202,11 @@ public class WeatherDetailActivity extends AppCompatActivity {
         suggtion_txt.setText(weather.getSuggestion().getUv().getTxt());
     }
 
+    @OnClick(R.id.detail_back)
+    public void back(){
+        finish();
+    }
+
     public static void actionStart(Context context, String city){
         Intent intent = new Intent(context, WeatherDetailActivity.class);
         intent.putExtra("cityname", city);
