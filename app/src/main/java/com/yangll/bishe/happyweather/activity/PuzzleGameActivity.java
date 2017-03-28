@@ -366,7 +366,17 @@ public class PuzzleGameActivity extends AppCompatActivity {
                 editor.putBoolean(prisentImgurl+"boolean", true);
                 editor.commit();
             }
-            queryKnowledge();
+
+            if (WeatherUtil.list.size() == 0){
+                queryKnowledge();
+            }else {
+                int i = (int) (Math.random() * (WeatherUtil.list.size() - 1));
+                Log.e("tips:", WeatherUtil.list.get(i).getContent());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(prisentImgurl, WeatherUtil.list.get(i).getContent());
+                editor.commit();
+            }
+
             game_show.setClickable(true);
             game_show.setBackgroundResource(R.drawable.a_selector_blue_button);
 
@@ -379,16 +389,18 @@ public class PuzzleGameActivity extends AppCompatActivity {
     //从服务器中获取气象小知识
     private void queryKnowledge(){
         BmobQuery<knowledge> query = new BmobQuery<>();
-        int i = (int) (Math.random() * 15);
-        query.addWhereEqualTo("sing", i+"");
+        //int i = (int) (Math.random() * 15);
+        //query.addWhereEqualTo("sing", i+"");
         query.findObjects(new FindListener<knowledge>() {
             @Override
             public void done(List<knowledge> list, BmobException e) {
                 if (e == null){
+                    WeatherUtil.list = list;
+                    int i = (int) (Math.random() * (WeatherUtil.list.size() - 1));
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(prisentImgurl, list.get(0).getContent());
+                    editor.putString(prisentImgurl, list.get(i).getContent());
                     editor.commit();
-                    Log.e("tips:", list.get(0).getContent());
+                    Log.e("tips:", list.get(i).getContent());
                 }else {
                     Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
                 }

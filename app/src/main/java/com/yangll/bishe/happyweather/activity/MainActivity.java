@@ -110,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
         MyProgressBar myProgressBar = new MyProgressBar();
         progressBar = myProgressBar.createMyProgressBar(this,null);
 
+        WeatherUtil.list.clear();
+
         weatherDB = WeatherDB.getInstance(this);
 
         adapter = new MainGalleryAdapter();

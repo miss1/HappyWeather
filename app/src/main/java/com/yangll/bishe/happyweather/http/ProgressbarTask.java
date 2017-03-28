@@ -87,7 +87,14 @@ public class ProgressbarTask extends AsyncTask<Void, Integer, Void> {
                 if (valL + varR == 100){
                     valueRe.setVisibility(View.VISIBLE);
                     if (pk_conclosion != null){
-                        queryKnowledge();
+                        if (WeatherUtil.list.size() == 0){
+                            queryKnowledge();
+                        }else {
+                            Log.e("knowledgeSize", WeatherUtil.list.size()+"");
+                            int i = (int) (Math.random() * (WeatherUtil.list.size() - 1));
+                            pk_conclosion.setText(WeatherUtil.list.get(i).getContent());
+                            pk_conclosion.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
 
@@ -99,13 +106,15 @@ public class ProgressbarTask extends AsyncTask<Void, Integer, Void> {
     //从服务器中获取气象小知识
     private void queryKnowledge(){
         BmobQuery<knowledge> query = new BmobQuery<>();
-        int i = (int) (Math.random() * 15);
-        query.addWhereEqualTo("sing", i+"");
+        //int i = (int) (Math.random() * 15);
+        //query.addWhereEqualTo("sing", i+"");
         query.findObjects(new FindListener<knowledge>() {
             @Override
             public void done(List<knowledge> list, BmobException e) {
                 if (e == null){
-                    pk_conclosion.setText(list.get(0).getContent());
+                    WeatherUtil.list = list;
+                    int i = (int) (Math.random() * (list.size() - 1));
+                    pk_conclosion.setText(list.get(i).getContent());
                     pk_conclosion.setVisibility(View.VISIBLE);
                 }else {
                     Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
