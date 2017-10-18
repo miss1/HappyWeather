@@ -10,13 +10,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class WeatherOpenHelper extends SQLiteOpenHelper {
 
-    public static final String CREATE_CITY = "create table City ("        //city表
+    /*public static final String CREATE_CITY = "create table City ("        //city表
             + "id integer primary key autoincrement, "
             + "cityId text, "
             + "cityZh text, "
             + "provinceZh text, "
             + "lat text, "
-            + "lon text)";
+            + "lon text)";*/
 
     public static final String CREATE_WEATHER = "create table Weather ("        //weather表
             + "id integer primary key autoincrement, "
@@ -30,13 +30,13 @@ public class WeatherOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(CREATE_CITY);
+        /*sqLiteDatabase.execSQL(CREATE_CITY);*/
         sqLiteDatabase.execSQL(CREATE_WEATHER);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("drop if table exists City");
+        /*sqLiteDatabase.execSQL("drop if table exists City");*/
         sqLiteDatabase.execSQL("drop if table exists Weather");
         onCreate(sqLiteDatabase);
     }

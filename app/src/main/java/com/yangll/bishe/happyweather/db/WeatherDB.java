@@ -17,17 +17,27 @@ import java.util.List;
 
 public class WeatherDB {
 
-    public static final String DB_NAME = "yll_weather";  //数据库名称
+   /* public static final String DB_NAME = "yll_weather";  //数据库名称
 
-    public static final int VERSION = 1;         //数据库版本
+    public static final int VERSION = 1;         //数据库版本*/
+
+    final String DATABASE_PATH="data/data/"+ "com.yangll.bishe.happyweather" + "/databases/";
+    String databaseFile=DATABASE_PATH+"citydb.db";
 
     private static WeatherDB weatherDB;
 
     private SQLiteDatabase db;
 
+    private static final String CREATE_WEATHER = "create table if not exists Weather ("        //weather表
+            + "id integer primary key autoincrement, "
+            + "city text, "
+            + "location integer, "
+            + "response text)";
+
     private WeatherDB (Context context){
-        WeatherOpenHelper dbHelper = new WeatherOpenHelper(context, DB_NAME, null, VERSION);
-        db = dbHelper.getWritableDatabase();
+        /*WeatherOpenHelper dbHelper = new WeatherOpenHelper(context, DB_NAME, null, VERSION);*/
+        db = SQLiteDatabase.openOrCreateDatabase(databaseFile, null);
+        db.execSQL(CREATE_WEATHER);
     }
 
     //获取WeatherDB的实例

@@ -16,13 +16,15 @@ import com.yangll.bishe.happyweather.db.WeatherDB;
 import com.yangll.bishe.happyweather.http.HttpPost;
 import com.yangll.bishe.happyweather.http.JSONCon;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
 
 public class Spalsh extends AppCompatActivity {
-
-    private WeatherDB weatherDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,46 +33,51 @@ public class Spalsh extends AppCompatActivity {
 
         Bmob.initialize(this, JSONCon.APPLICATION_ID);
 
-        weatherDB = WeatherDB.getInstance(this);
+        importDataBase();
 
-        //如果已经将所有城市信息存储到数据库，则延迟两秒跳到主界面;否则查询并存储城市新之后跳到主界面
-        if (weatherDB.loadAllCity().size() > 0){
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    jumpToMain();
-                }
-            }, 2000);
-        }else {
-            new HttpPost(JSONCon.CITY_URL, cityListHandler).exe();
-        }
-    }
-
-    private Handler cityListHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case HttpPost.POST_SUCCES:
-                    Log.e("Tag", (String) msg.obj);
-                    Gson gson = new Gson();
-                    String obj = (String) msg.obj;
-                    String response = "["+obj.split("\\[")[1];
-                    List<City> cityList = gson.fromJson(response, new TypeToken<List<City>>(){}.getType());
-                    weatherDB.saveCities(cityList);
-                    jumpToMain();
-                    break;
-                case HttpPost.POST_LOGIC_ERROR:
-                    Toast.makeText(Spalsh.this, (String) msg.obj,Toast.LENGTH_SHORT).show();
-                    finish();
-                    break;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                jumpToMain();
             }
-            super.handleMessage(msg);
-        }
-    };
+        }, 2000);
+
+    }
 
     private void jumpToMain() {
         Intent inetent = new Intent(Spalsh.this, MainActivity.class);
         startActivity(inetent);
         finish();
+    }
+
+    //导入数据库
+    public void importDataBase(){
+        final String DATABASE_PATH="data/data/"+ "com.yangll.bishe.happyweather" + "/databases/";
+        String databaseFile=DATABASE_PATH+"citydb.db";
+        //创建databases目录（不存在时）
+        File file=new File(DATABASE_PATH);
+        if(!file.exists()){
+            file.mkdirs();
+        }
+        //判断数据库是否存在
+        if (!new File(databaseFile).exists()) {
+            //把数据库拷贝到/data/data/<package_name>/databases目录下
+            try {
+                FileOutputStream fileOutputStream = new FileOutputStream(databaseFile);
+                //数据库放assets目录下
+                //InputStream inputStream = getAssets().open("mydb.db");
+                //数据库方res/rew目录下
+                InputStream inputStream=getResources().openRawResource(R.raw.citydb);
+                byte[] buffer = new byte[1024];
+                int readBytes = 0;
+
+                while ((readBytes = inputStream.read(buffer)) != -1)
+                    fileOutputStream.write(buffer, 0, readBytes);
+
+                inputStream.close();
+                fileOutputStream.close();
+            } catch (IOException e) {
+            }
+        }
     }
 }
