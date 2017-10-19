@@ -27,6 +27,7 @@ import com.yangll.bishe.happyweather.http.HttpPost;
 import com.yangll.bishe.happyweather.http.JSONCon;
 import com.yangll.bishe.happyweather.http.WeatherUtil;
 import com.yangll.bishe.happyweather.view.MyProgressBar;
+import com.yangll.bishe.happyweather.view.SpaceItemDecoration;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -97,6 +98,10 @@ public class HistoryInTodayActivity extends AppCompatActivity {
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         history_list.setLayoutManager(staggeredGridLayoutManager);
         history_list.setAdapter(adapter);
+
+        //设置item之间的间隔
+        SpaceItemDecoration decoration = new SpaceItemDecoration(16);
+        history_list.addItemDecoration(decoration);
 
         adapter.setOnRecyclerViewListener(new OnRecyclerViewListener() {
             @Override

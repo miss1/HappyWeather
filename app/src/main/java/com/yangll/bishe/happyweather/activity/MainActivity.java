@@ -85,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
     @BindView(R.id.location)
     ImageView img_location;
 
+    @BindView(R.id.text_view_toolbar_title)
+    TextView changeCity;
+
     private MainGalleryAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
 
@@ -194,6 +197,16 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                     return false;
                 }
             });
+
+            //点击顶部城市名称弹出下拉框切换城市
+            changeCity.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    spinerPopWindow.setWidth(mToolBarTextView.getWidth());
+                    spinerPopWindow.setHeight(300);
+                    spinerPopWindow.showAsDropDown(mToolBarTextView);
+                }
+            });
         }
     }
 
@@ -254,14 +267,6 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
 
                     }
                 }).show();
-    }
-
-    //点击顶部城市名称弹出下拉框切换城市
-    @OnClick(R.id.text_view_toolbar_title)
-    public void changeCity(View view){
-        spinerPopWindow.setWidth(mToolBarTextView.getWidth());
-        spinerPopWindow.setHeight(300);
-        spinerPopWindow.showAsDropDown(mToolBarTextView);
     }
 
     //定位相关设置
@@ -533,10 +538,15 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
     @Override
     protected void onResume() {
         if(weatherDB.getAllResponses().size() > 0){
-            spinerlist.clear();
-            spinerlist.addAll(weatherDB.getAllResponses());
-            spinerAdapter.bindDatas(spinerlist);
-            spinerAdapter.notifyDataSetChanged();
+            if (spinerAdapter == null){
+                initSpinerView();
+
+            }else {
+                spinerlist.clear();
+                spinerlist.addAll(weatherDB.getAllResponses());
+                spinerAdapter.bindDatas(spinerlist);
+                spinerAdapter.notifyDataSetChanged();
+            }
         }
         super.onResume();
     }
