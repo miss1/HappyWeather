@@ -203,10 +203,14 @@ public class PuzzleGameActivity extends AppCompatActivity {
                     imgHandler.sendMessage(msg);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    progressBar.setVisibility(View.GONE);
+                    Message msg = new Message();
+                    msg.what = 2;
+                    imgHandler.sendMessage(msg);
                 } catch (ExecutionException e) {
                     e.printStackTrace();
-                    progressBar.setVisibility(View.GONE);
+                    Message msg = new Message();
+                    msg.what = 2;
+                    imgHandler.sendMessage(msg);
                 }
             }
         }).start();
