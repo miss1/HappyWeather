@@ -6,7 +6,7 @@ import cn.bmob.v3.BmobObject;
  * Created by Administrator on 2017/3/21.
  */
 
-public class knowledge extends BmobObject {
+public class Knowledge extends BmobObject {
 
     private String sing;
     private String content;

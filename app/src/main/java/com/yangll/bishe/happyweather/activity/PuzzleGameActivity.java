@@ -30,7 +30,7 @@ import com.bumptech.glide.Glide;
 import com.yangll.bishe.happyweather.R;
 import com.yangll.bishe.happyweather.adapter.GameAdapter;
 import com.yangll.bishe.happyweather.adapter.OnRecyclerViewListener;
-import com.yangll.bishe.happyweather.bean.knowledge;
+import com.yangll.bishe.happyweather.bean.Knowledge;
 import com.yangll.bishe.happyweather.bean.puzzle;
 import com.yangll.bishe.happyweather.http.JSONCon;
 import com.yangll.bishe.happyweather.http.OnLoadListener;
@@ -392,12 +392,12 @@ public class PuzzleGameActivity extends AppCompatActivity {
 
     //从服务器中获取气象小知识
     private void queryKnowledge(){
-        BmobQuery<knowledge> query = new BmobQuery<>();
+        BmobQuery<Knowledge> query = new BmobQuery<>();
         //int i = (int) (Math.random() * 15);
         //query.addWhereEqualTo("sing", i+"");
-        query.findObjects(new FindListener<knowledge>() {
+        query.findObjects(new FindListener<Knowledge>() {
             @Override
-            public void done(List<knowledge> list, BmobException e) {
+            public void done(List<Knowledge> list, BmobException e) {
                 if (e == null){
                     WeatherUtil.list = list;
                     int i = (int) (Math.random() * (WeatherUtil.list.size() - 1));

@@ -3,7 +3,7 @@ package com.yangll.bishe.happyweather.http;
 import android.content.Context;
 
 import com.yangll.bishe.happyweather.R;
-import com.yangll.bishe.happyweather.bean.knowledge;
+import com.yangll.bishe.happyweather.bean.Knowledge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class WeatherUtil {
 
     public static String bg = "";
 
-    public static List<knowledge> list = new ArrayList<>();
+    public static List<Knowledge> list = new ArrayList<>();
 
     /*
     * dip转换成pix
