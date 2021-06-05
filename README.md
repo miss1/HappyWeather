@@ -5,7 +5,7 @@
 > 用gson解析json数据<br>
 > 用butterknife进行数据绑定
 
-> [H5版代码请戳这里](https://github.com/miss1/HappyWeatherH5)<br>
+> [H5版代码请戳这里](https://miss1.github.io/outLinkPage/weather/html/index.html)<br>
 
 ## 项目apk下载安装
 
