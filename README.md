@@ -12,7 +12,7 @@
 >[下载apk查看效果请戳这里](https://github.com/miss1/HappyWeather/releases/download/1.0/happyweather.apk)<br>
 
 >手机端请用浏览器扫描下面二维码进行下载安装<br>
-![image](https://github.com/miss1/HappyWeather/raw/master/screenshot/happyweather.png)
+![image](https://github.com/miss1/HappyWeather/raw/master/screenshot/happyweatherlink.png)
 
 ## 项目截图
 
